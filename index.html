@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="de">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Schon wieder – Der Aufstieg der AfD/NSDAP (Fassung November 2026)</title>
+		<style>
+body {
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva,
+		Verdana, sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+	margin: 0;
+	color: #000;
+	background-color: #fff;
+	background-image: url('paper.webp');
+	background-repeat: repeat;
+	background-size: 512px;
+	overflow-x: hidden;
+	--width: min(600px, 100vw);
+	--headline: calc(var(--width) / 30);
+}
+body a {
+	color: inherit;
+	text-decoration: underline;
+	text-decoration-thickness: 0.1em;
+}
+body::after {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: -2;
+	background-color: #fff;
+	opacity: calc(1 - var(--stage, 1));
+	pointer-events: none;
+}
+.white {
+	background-color: #fff;
+	height: 50vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: -1;
+	border-bottom: solid 1px rgba(0, 0, 0, 0.3);
+	opacity: var(--stage, 1);
+}
+.content {
+	padding: 0 20px 20vh 20px;
+	width: var(--width);
+	box-sizing: border-box;
+	margin: auto;
+}
+.content h1 {
+	text-align: left;
+	margin: calc(50vh - var(--headline) * 4.5) 0 0;
+	font-size: calc(var(--headline) * 3);
+}
+.content h2 {
+	margin: 1em 0 5em;
+	text-align: left;
+	font-size: calc(var(--headline) * 1.5);
+}
+.content h3 {
+	margin: 2em 0 1em;
+	text-align: left;
+	font-size: 1.2em;
+}
+.content h3.after {
+	margin-top: 8rem;
+}
+.content p {
+	margin: 1em 0;
+}
+.content ul {
+	margin: 1em 0;
+	padding-left: 1.2em;
+}
+.content li {
+	margin: 0.5em 0;
+}
+.content blockquote {
+	font-style: italic;
+	padding: 5rem 1em 0;
+	margin: 0;
+	color: #777;
+}
+.content p.quoted {
+	text-align: right;
+	font-style: italic;
+	color: #777;
+}
+.content p.punch {
+	margin-top: 1.5em;
+}
+.content p.final {
+	text-align: center;
+	margin: 6rem 0 0;
+	font-size: 1.15em;
+	line-height: 1.7;
+}
+.content p.final .big {
+	font-size: 2.4em;
+	line-height: 1.2;
+}
+span.switch {
+	font-weight: bold;
+	display: inline-grid;
+	text-align: center;
+}
+span.switch > span {
+	grid-column: 1;
+	grid-row: 1;
+	text-wrap: nowrap;
+	white-space: nowrap;
+	transition: opacity 0.3s;
+}
+span.switch > span:first-child {
+	color: #a70;
+	opacity: 1;
+}
+span.switch > span:last-child {
+	color: #0af;
+	opacity: 0;
+}
+span.switch.neu > span:first-child {
+	opacity: 0;
+}
+span.switch.neu > span:last-child {
+	opacity: 1;
+}
+.sources,
+footer {
+	width: var(--width);
+	box-sizing: border-box;
+	margin: 0 auto;
+	padding: 0 20px;
+	font-size: 13px;
+	color: rgba(0, 0, 0, 0.72);
+}
+.sources h3 {
+	font-size: 15px;
+	margin: 2.5em 0 0.6em;
+	color: #000;
+}
+.sources h4 {
+	font-size: 13px;
+	margin: 1.4em 0 0.3em;
+}
+.sources ul {
+	padding-left: 1.1em;
+	margin: 0;
+}
+.sources li {
+	margin: 0.25em 0;
+	overflow-wrap: anywhere;
+}
+footer {
+	padding-top: 2em;
+	padding-bottom: 4em;
+}
+footer dt {
+	font-weight: bold;
+	margin-top: 0.8em;
+}
+footer dd {
+	margin: 0.2em 0 0;
+}
+
+		</style>
+		<script>
+			// Umschaltung nach dem Original von Michael Kreil (MIT). Statt IntersectionObserver
+			// (dessen rootMargin in eingebetteten Rahmen ignoriert wird) wird die Position jedes
+			// Umschalters beim Scrollen direkt mit der Bildschirmmitte verglichen.
+			document.addEventListener('DOMContentLoaded', () => {
+				const switches = [...document.querySelectorAll('.content span.switch')];
+				const anchor = document.getElementById('fade-anchor');
+				const FADE_PX = 200;
+				let queued = false;
+				const update = () => {
+					queued = false;
+					const mid = window.innerHeight / 2;
+					for (const sw of switches) {
+						const r = sw.firstElementChild.getBoundingClientRect();
+						sw.classList.toggle('neu', (r.top + r.bottom) / 2 < mid);
+					}
+					const passed = mid - anchor.getBoundingClientRect().bottom;
+					const stage = 1 - Math.min(1, Math.max(0, passed / FADE_PX));
+					document.documentElement.style.setProperty('--stage', String(stage));
+				};
+				const request = () => {
+					if (!queued) {
+						queued = true;
+						requestAnimationFrame(update);
+					}
+				};
+				update();
+				addEventListener('scroll', request, { passive: true });
+				document.addEventListener('scroll', request, { passive: true, capture: true });
+				addEventListener('resize', request);
+				addEventListener('load', update);
+				if (document.fonts && document.fonts.ready) document.fonts.ready.then(update);
+				setInterval(update, 500);
+			});
+		</script>
+	</head>
+	<body>
+		<div class="white"></div>
+		<div class="content">
+<h1>Der Aufstieg <nobr>der <span class="switch" style="text-align: left"><span>NSDAP</span><span>AfD</span></span></nobr></h1>
+<h2>Ein <span class="switch"><span>historischer</span><span>fiktiver</span></span> <nobr><span class="switch" style="text-align: right"><span>Rück</span><span>Aus</span></span>blick</nobr></h2>
+<p></p>
+<p>
+	Die <span class="switch"><span>NSDAP</span><span>AfD</span></span> hat sich zwischen <span class="switch"><span>1920</span><span>2013</span></span> und <span class="switch"><span>1932</span><span>2026</span></span> von einer kleinen Splitterpartei zu
+	einer der mächtigsten politischen Bewegungen in Deutschland entwickelt. Ihr Aufstieg war eng mit
+	den politischen und wirtschaftlichen Krisen der <nobr><span class="switch" style="text-align: right"><span>Weimarer R</span><span>Bundesr</span></span>epublik</nobr> verbunden.
+</p>
+
+<h3>Die Anfänge</h3>
+
+<p>
+	Eine zentrale Strategie der <span class="switch"><span>NSDAP</span><span>AfD</span></span> war der massive Einsatz von Propaganda. Früher und
+	geschickter als die anderen Parteien nutzte sie die <span class="switch"><span>modernsten Mittel</span><span>neuen Medien</span></span> ihrer Zeit:
+	<nobr><span class="switch" style="text-align: right"><span>Lautsprecherwagen</span><span>TikTok</span></span>,</nobr> <span class="switch"><span>Schallplatten</span><span>YouTube</span></span> und <span class="switch"><span>Propagandafilme</span><span>Telegram</span></span> erreichten
+	Menschen, die nie eine Parteiversammlung besucht hätten. Sie wiederholte beständig
+	<span class="switch"><span>antisemitische</span><span>rassistische</span></span> Unwahrheiten und Verschwörungserzählungen, verbreitete
+	<span class="switch"><span>Hetzblätter</span><span>Fake News</span></span> und schürte Angst und Hass <span class="switch"><span>auf den Straßen</span><span>in sozialen Netzwerken</span></span> – so
+	lange, bis die Narrative in der Mitte der Gesellschaft angekommen waren und auch von etablierten
+	Medien und Politikern übernommen wurden.
+</p>
+<p>
+	Die großen Parteien – die SPD, <span class="switch"><span>das Zentrum</span><span>die CDU</span></span> und die <span class="switch"><span>BVP</span><span>CSU</span></span> – konnten der
+	Radikalisierung oft nicht genug entgegensetzen. Konservative sahen die Ausbreitung rechtsextremer
+	Positionen nicht als Folge der <nobr><span class="switch"><span>NSDAP</span><span>AfD</span></span>-</nobr>Propaganda, sondern als Ausdruck der öffentlichen
+	Meinung, und folgten dem Rechtsruck. Das spaltete die politische Mitte weiter. Ihren größten
+	Gegner sah die <span class="switch"><span>NSDAP</span><span>AfD</span></span> links und beschimpfte ihn als <nobr>„<span class="switch" style="text-align: right"><span>bolschewistisch</span><span>links-grün-versifft</span></span>“.</nobr>
+</p>
+
+<h3>Krise und Durchbruch</h3>
+
+<p>
+	Die <span class="switch"><span>Spanische Grippe</span><span>Coronapandemie</span></span> hatte das Land erschöpft. Bei der
+	<nobr><span class="switch" style="text-align: right"><span>Reich</span><span>Bunde</span></span>stagswahl</nobr> <span class="switch"><span>1928</span><span>2021</span></span> wurde die SPD stärkste Kraft, <nobr><span class="switch" style="text-align: right"><span>Reich</span><span>Bunde</span></span>skanzler</nobr> <span class="switch"><span>Hermann Müller</span><span>Olaf Scholz</span></span> bildete eine Koalition aus mehreren Parteien, die von Anfang an stritt. Kurz
+	darauf übernahm <span class="switch"><span>im Zentrum</span><span>in der CDU</span></span> mit <span class="switch"><span>Ludwig Kaas</span><span>Friedrich Merz</span></span> ein Mann den Vorsitz,
+	der seine Partei weiter nach rechts rückte.
+</p>
+<p>
+	Ab <span class="switch"><span>1929</span><span>2022</span></span> traf eine schwere <nobr><span class="switch" style="text-align: right"><span>Wirtschafts</span><span>Energie</span></span>krise</nobr> das Land. Unternehmen gerieten in Not,
+	die Arbeitslosigkeit stieg, Bauern gingen gegen die Politik aus Berlin auf die Straße. Die
+	<span class="switch"><span>NSDAP</span><span>AfD</span></span> nutzte die Ängste geschickt und versprach, das politische Chaos zu beenden und
+	Deutschland wieder stark zu machen.
+</p>
+<p>
+	Im <span class="switch"><span>Dezember 1929</span><span>September 2024</span></span> wurde in Thüringen gewählt. Die <span class="switch"><span>NSDAP</span><span>AfD</span></span> kam auf
+	<span class="switch"><span>11,3</span><span>32,8</span></span> Prozent – <nobr><span class="switch" style="text-align: right"><span>genug, um mitzuregieren</span><span>mehr als je zuvor in einem Landtag</span></span>.</nobr> Wenige Monate
+	später zerbrach in Berlin die Koalition, im Streit mit der liberalen <nobr><span class="switch" style="text-align: right"><span>DVP</span><span>FDP</span></span>,</nobr> die nach rechts
+	gerückt war und danach in der Bedeutungslosigkeit versank. Es kam zu vorgezogenen Neuwahlen.
+</p>
+<p>
+	Rückenwind bekam die <span class="switch"><span>NSDAP</span><span>AfD</span></span> von einem der mächtigsten Medienunternehmer <nobr><span class="switch" style="text-align: right"><span>des Landes</span><span>der Welt</span></span>:</nobr> <nobr><span class="switch" style="text-align: right"><span>Alfred Hugenberg</span><span>Elon Musk</span></span>,</nobr> Herr über <nobr><span class="switch" style="text-align: right"><span>Zeitungen und die Ufa</span><span>die Plattform X</span></span>,</nobr> hatte
+	sich offen an ihre Seite gestellt und ihr eine riesige Bühne verschafft. Und bürgerliche Parteien hatten ein
+	Tabu gebrochen: Sie <span class="switch"><span>regierten</span><span>fanden</span></span> erstmals <span class="switch"><span>in Thüringen</span><span>im Bundestag</span></span> <span class="switch"><span>gemeinsam mit</span><span>eine Mehrheit mit</span></span> der <nobr><span class="switch" style="text-align: right"><span>NSDAP</span><span>AfD</span></span>.</nobr>
+</p>
+<p>
+	Bei der Wahl im <span class="switch"><span>September 1930</span><span>Februar 2025</span></span> gab rund jeder fünfte Wähler der <span class="switch"><span>NSDAP</span><span>AfD</span></span> seine
+	Stimme. Sie wurde zweitstärkste Kraft. <span class="switch"><span>Zentrum</span><span>CDU</span></span> und <span class="switch"><span>BVP</span><span>CSU</span></span> waren nun auf die SPD
+	angewiesen, die sie zuvor heftig angegriffen hatten. Unter Druck – ein Scheitern und erneute
+	Neuwahlen wären noch gefährlicher – trug die SPD eine Regierung unter <nobr><span class="switch" style="text-align: right"><span>Reich</span><span>Bunde</span></span>skanzler</nobr>
+	<span class="switch"><span>Brüning</span><span>Merz</span></span> schließlich mit.
+</p>
+<p>
+	Dazu kam ein Handelskrieg: Die US-Regierung unter <span class="switch"><span>Herbert Hoover</span><span>Donald Trump</span></span> verhängte
+	<span class="switch"><span>1930</span><span>2025</span></span> drastische Zölle auf ausländische Waren und setzte damit die exportabhängige deutsche
+	Wirtschaft unter Druck. Eine US-Regierung, die Parteien wie die <span class="switch"><span>NSDAP</span><span>AfD</span></span> offen ermutigte, gab
+	es <nobr><span class="switch" style="text-align: right"><span>nicht</span><span>nun auch</span></span>.</nobr>
+</p>
+
+<h3>Die ignorierten Warnungen</h3>
+
+<p>
+	Dabei lagen die Beweise auf dem Tisch: Ein <nobr><span class="switch" style="text-align: right"><span>97</span><span>1100</span></span>-</nobr>seitiges Gutachten <span class="switch"><span>des Preußischen Innenministeriums</span><span>des Bundesamts für Verfassungsschutz</span></span> trug Belege für die
+	<nobr><span class="switch" style="text-align: right"><span>staats</span><span>verfassungs</span></span>feindlichen</nobr> Bestrebungen der <span class="switch"><span>NSDAP</span><span>AfD</span></span> zusammen – ihr ausgrenzendes
+	Volksverständnis, ihre Angriffe auf das Demokratieprinzip, ihre Verbindungen zu extremistischen
+	Netzwerken. Ein Verbotsverfahren lehnte die <nobr><span class="switch" style="text-align: right"><span>Reich</span><span>Bunde</span></span>sregierung</nobr> dennoch ab:
+	Man wolle die Partei politisch stellen, ein gescheitertes Verfahren würde sie nur stärken.
+</p>
+<p>
+	Vor <span class="switch"><span>dem Reichsgericht in Leipzig</span><span>dem Verwaltungsgericht Köln</span></span> präsentierte sich die Partei als
+	Kraft auf dem Boden der Verfassung – und ging gestärkt aus dem <span class="switch"><span>Prozess</span><span>Verfahren</span></span> hervor.
+</p>
+<p>
+	Die versprochene „gute Politik“ aber blieb aus. Die Wirtschaft kam nicht in Gang, die Reformen der
+	Regierung waren unpopulär, die Zahl der Arbeitslosen stieg auf über <span class="switch"><span>sechs</span><span>drei</span></span> Millionen. Immer
+	mehr Menschen wandten sich der <span class="switch"><span>NSDAP</span><span>AfD</span></span> zu.
+</p>
+
+<h3>Durchbruch in den Ländern</h3>
+
+<p>
+	Im <span class="switch"><span>April 1932</span><span>September 2026</span></span> wurde die <span class="switch"><span>NSDAP</span><span>AfD</span></span> in <nobr><span class="switch" style="text-align: right"><span>​</span><span>Sachsen-</span></span>Anhalt</nobr> mit <span class="switch"><span>40,9</span><span>43,8</span></span>
+	Prozent mit großem Abstand stärkste Kraft. <span class="switch"><span>Am selben Tag</span><span>Zwei Wochen später</span></span> gewann sie auch in
+	<span class="switch"><span>Preußen</span><span>Mecklenburg-Vorpommern</span></span> die meisten Stimmen, und die demokratischen Parteien
+	<span class="switch"><span>verloren</span><span>behielten</span></span> dort <span class="switch"><span>ihre</span><span>nur knapp ihre</span></span> Mehrheit.
+</p>
+<p>
+	In Berlin taumelte die Regierung. Im <span class="switch"><span>Mai 1932</span><span>Oktober 2026</span></span> trat <span class="switch"><span>Reichswehrminister Groener</span><span>Arbeitsministerin Bas</span></span> zurück, und schon wurde über einen Nachfolger des Kanzlers
+	spekuliert. Im selben Monat wählte <span class="switch"><span>der Preußische Landtag</span><span>der Landtag in Magdeburg</span></span> einen
+	<span class="switch"><span>Nationalsozialisten</span><span>AfD-Politiker</span></span> zum Präsidenten. <span class="switch"><span>Das Zentrum</span><span>Die CDU</span></span> <nobr><span class="switch" style="text-align: right"><span>enthielt sich der Stimme</span><span>empfahl Enthaltung</span></span>.</nobr>
+</p>
+
+<h3>Machtübergabe an die <span class="switch"><span>NSDAP</span><span>AfD</span></span> im Jahr <span class="switch"><span>1933</span><span>2028</span></span></h3>
+
+<p>
+	Im <span class="switch"><span>Mai 1932</span><span>Dezember 2026</span></span> wählte der Landtag in <span class="switch"><span>Dessau</span><span>Magdeburg</span></span> den ersten
+	<nobr><span class="switch" style="text-align: right"><span>NS-</span><span>AfD-</span></span>Ministerpräsidenten</nobr> Deutschlands – mit Unterstützung <nobr><span class="switch" style="text-align: right"><span>der Deutschnationalen</span><span>aus der CDU</span></span>.</nobr> <span class="switch"><span>Neun Tage</span><span>Wenige Monate</span></span> später zerbrach die Regierung unter <nobr><span class="switch" style="text-align: right"><span>Reich</span><span>Bunde</span></span>skanzler</nobr>
+	<nobr><span class="switch" style="text-align: right"><span>Brüning</span><span>Merz</span></span>.</nobr> Sein Nachfolger <span class="switch"><span>Franz von Papen</span><span>aus den eigenen Reihen</span></span> wollte die <span class="switch"><span>NSDAP</span><span>AfD</span></span>
+	„zähmen“. Neuwahlen folgten.
+</p>
+<p>
+	Die <span class="switch"><span>NSDAP</span><span>AfD</span></span> wurde mit 37,3 Prozent stärkste Partei. Mit den Stimmen der bürgerlichen Parteien
+	wurde <span class="switch"><span>Hermann Göring</span><span>ein AfD-Politiker</span></span> <nobr><span class="switch" style="text-align: right"><span>Reichs</span><span>Bundes</span></span>tagspräsident.</nobr> <span class="switch"><span>Das</span><span>Die</span></span> <span class="switch"><span>Zentrum</span><span>CDU</span></span>
+	verhandelte sogar über eine Koalition. Doch der <span class="switch"><span>NSDAP</span><span>AfD</span></span> ging es nur darum zu zeigen, dass
+	ohne sie keine stabile Regierung möglich war. Erneut wurden Neuwahlen nötig. Währenddessen kam es
+	immer wieder zu Ausschreitungen; die Gewalt ging nun überwiegend von Anhängern der <span class="switch"><span>NSDAP</span><span>AfD</span></span>
+	aus.
+</p>
+<p>
+	Im November <span class="switch"><span>1932</span><span>2027</span></span> verlor die <span class="switch"><span>NSDAP</span><span>AfD</span></span> vier Prozentpunkte. Viele glaubten, ihr Aufstieg
+	sei gestoppt: Die Partei steckte in einer Führungskrise, die Wirtschaft zeigte erste Zeichen der
+	Erholung. Die Konservativen versuchten, den gemäßigten Flügel abzuspalten. Doch <span class="switch"><span>Hitler</span><span>der Spitzenkandidat</span></span> entmachtete <span class="switch"><span>Gregor Strasser</span><span>die Gemäßigten</span></span> und griff selbst nach der
+	Kanzlerschaft.
+</p>
+<p>
+	Von den Konservativen kam der Vorschlag, den „Wählerwillen“ zu akzeptieren. Man glaubte, ihn
+	kontrollieren zu können – ein fataler Irrtum. Am 30. Januar <span class="switch"><span>1933</span><span>2028</span></span> wurde <span class="switch"><span>Hitler</span><span>er</span></span> mit
+	ihrer Unterstützung zum <nobr><span class="switch" style="text-align: right"><span>Reich</span><span>Bunde</span></span>skanzler</nobr> <nobr><span class="switch" style="text-align: right"><span>ernannt</span><span>gewählt</span></span>.</nobr>
+</p>
+<p>
+	Im Februar <span class="switch"><span>1933</span><span>2028</span></span> wurde auf das Reichstagsgebäude ein Brandanschlag verübt. Die <span class="switch"><span>NSDAP</span><span>AfD</span></span>
+	nutzte ihn, um ihre Gegner zu verfolgen; linke Abgeordnete mussten fliehen oder wurden verhaftet.
+	Am 23. März <span class="switch"><span>1933</span><span>2028</span></span> übertrug das Parlament der <span class="switch"><span>NSDAP</span><span>AfD</span></span> die Macht – gegen die Stimmen der
+	SPD, mit denen von <nobr><span class="switch" style="text-align: right"><span>Zentrum</span><span>CDU</span></span>,</nobr> <span class="switch"><span>BVP</span><span>CSU</span></span> und <nobr><span class="switch" style="text-align: right"><span>DVP</span><span>FDP</span></span>.</nobr>
+</p>
+<p>
+	Bis zum Sommer <span class="switch"><span>1933</span><span>2028</span></span> waren Länder, Gerichte, Gewerkschaften und Presse gleichgeschaltet, alle
+	anderen Parteien verboten oder aufgelöst. <span class="switch"><span>1935</span><span>2030</span></span> wurden <span class="switch"><span>Juden</span><span>Eingebürgerte</span></span> per Gesetz zu Bürgern
+	zweiter Klasse erklärt. <span class="switch"><span>1941</span><span>2036</span></span> begann die systematische <span class="switch"><span>Deportation</span><span>Remigration</span></span> von
+	Millionen Menschen.
+</p>
+<p>Eine der dunkelsten Epochen der deutschen Geschichte hatte begonnen.</p>
+<p class="again"><span class="switch"><span>​</span><span>Schon wieder.</span></span></p>
+<blockquote>
+	„Es gibt immer wiederkehrende Zyklen, Höhen und Tiefen, aber der Verlauf der Ereignisse ist im
+	Wesentlichen der gleiche, mit kleinen Abweichungen.<br />Man hat gesagt, dass sich die Geschichte
+	wiederholt. Das ist vielleicht nicht ganz richtig; sie reimt sich lediglich.“
+</blockquote>
+<p class="quoted">Theodor Reik, 1965</p>
+
+<h3 class="after">Wo der Vergleich hinkt</h3>
+
+<p>Die Parallelen sind erschreckend. Eine Gleichung sind sie nicht.</p>
+<ul>
+	<li>Der <nobr><span class="switch" style="text-align: right"><span>Reichs</span><span>Bundes</span></span>präsident</nobr> <span class="switch"><span>konnte</span><span>kann nicht</span></span> per Notverordnung regieren.</li>
+	<li>Den Kanzler <nobr><span class="switch" style="text-align: right"><span>ernannte er nach eigenem Willen</span><span>wählt das Parlament</span></span>.</nobr></li>
+	<li>Über ein Parteiverbot <nobr><span class="switch" style="text-align: right"><span>entschied die Regierung</span><span>entscheidet Karlsruhe</span></span>.</nobr></li>
+	<li>Eine Parteiarmee wie die SA <nobr><span class="switch" style="text-align: right"><span>zählte Hunderttausende</span><span>gibt es nicht</span></span>.</nobr></li>
+	<li>Die Arbeitslosenquote lag <span class="switch"><span>um 1932</span><span>zuletzt</span></span> bei <span class="switch"><span>fast 30</span><span>6,3</span></span> Prozent.</li>
+	<li>
+		Die demokratischen Parteien <span class="switch"><span>verloren</span><span>behielten</span></span> in <span class="switch"><span>vielen</span><span>fast allen</span></span> Ländern ihre Mehrheit.
+	</li>
+</ul>
+<p>
+	Außer in Sachsen-Anhalt blieb die AfD bei den Landtagswahlen 2026 etwa auf dem Niveau der
+	Bundestagswahl. Ihre Einstufung als gesichert rechtsextremistisch hat das Verwaltungsgericht Köln
+	vorläufig gestoppt; sie gilt als Verdachtsfall, das Hauptverfahren steht aus. Kritiker solcher
+	Vergleiche halten die Gleichsetzung mit der NSDAP für irreführend: Sie verharmlose die
+	NS-Verbrechen und treibe AfD-Wähler eher in eine Trotzhaltung. Die AfD selbst weist die
+	Einstufung als rechtsextremistisch zurück und sieht in der Verbotsdebatte einen Angriff auf die
+	Opposition.
+</p>
+<p class="punch">Der Ausgang <span class="switch"><span>stand</span><span>steht</span></span> nicht fest.</p>
+
+<h3 class="after">Was <span class="switch"><span>damals</span><span>heute</span></span> anders <span class="switch"><span>hätte sein können</span><span>sein kann</span></span></h3>
+
+<ul>
+	<li>
+		Die Konservativen <nobr><span class="switch" style="text-align: right"><span>hätten sich weigern können</span><span>können sich weigern</span></span>,</nobr> der <span class="switch"><span>NSDAP</span><span>AfD</span></span> ins Amt
+		zu helfen.
+	</li>
+	<li>
+		Die Parteien der Mitte <nobr><span class="switch" style="text-align: right"><span>hätten zusammenstehen können</span><span>können zusammenstehen</span></span>,</nobr> statt einander
+		zum Hauptgegner zu erklären.
+	</li>
+	<li>Und der Staat <nobr><span class="switch" style="text-align: right"><span>hätte die Partei verbieten können</span><span>kann ein Verbot beantragen</span></span>.</nobr></li>
+</ul>
+<p>
+	Anders als in der Weimarer Republik gibt es heute ein Bundesverfassungsgericht, das
+	verfassungswidrige Parteien verbieten kann – auf Antrag von Bundestag, Bundesrat oder
+	Bundesregierung. Die Gesellschaft für Freiheitsrechte hält ein Verbot der AfD laut ihrem
+	<a href="https://afd-gutachten.de/">Gutachten</a> vom Juni 2026 für juristisch tragfähig, andere
+	Juristen sehen die Voraussetzungen nicht erfüllt. Mehrere Landtage haben Schritte zur Prüfung
+	beschlossen, im Bundestag stockt ein fraktionsübergreifender Antrag.
+</p>
+<p class="final" id="fade-anchor">
+	<span class="big"><span class="switch"><span>Damals</span><span>Heute</span></span></span><br /><span class="switch"><span>hat man es nicht verhindert.</span><span>kann man es verhindern.</span></span>
+</p>
+
+		</div>
+		<section class="sources">
+<h3>Quellen zur Aktualisierung (Stand 5. November 2026)</h3>
+
+<h4>Bundesregierung, Umfragen, Wirtschaft</h4>
+<ul>
+	<li><a href="https://en.wikipedia.org/wiki/2026_Merz_government_crisis">Wikipedia: 2026 Merz government crisis</a> (Regierungskrise, Spekulationen über einen „Kanzlertausch“)</li>
+	<li><a href="https://www.leinetal24.de/welt/neue-umfrage-zwei-drittel-glauben-nicht-dass-merz-bis-2029-kanzler-bleibt-zr-94510549.html">ZDF-Politbarometer vom 25.09.2026: AfD 28 %, Union 21 % (Bericht)</a></li>
+	<li><a href="https://www.arbeitsagentur.de/presse/2026-41-arbeitsmarkt-im-oktober-2026">Bundesagentur für Arbeit: Arbeitsmarkt im Oktober 2026 (6,3 %)</a>; <a href="https://www.infranken.de/deutschland/zahl-der-arbeitslosen-steigt-im-juli-ueber-drei-millionen-art-6384742,PRINT">dpa: über drei Millionen Arbeitslose</a></li>
+	<li><a href="https://www.zdfheute.de/politik/trump-zoelle-deutsche-wirtschaft-usa-eu-exporte-100.html">ZDFheute: Trumps Zölle und die deutsche Wirtschaft</a></li>
+	<li><a href="https://www.zdfheute.de/politik/deutschland/baerbel-bas-spd-ruecktritt-100.html">ZDFheute: Rücktritt von Arbeitsministerin Bas (12.10.2026)</a></li>
+	<li><a href="https://www.tagesspiegel.de/politik/themen/alice-weidel/8">Tagesspiegel: Musks Wahlaufruf, Gastbeitrag in der „Welt am Sonntag“, Gespräch mit Weidel auf X</a>; <a href="https://www.salzburg24.at/news/welt/musk-schaltet-sich-live-zu-afd-veranstaltung-dazu-art-284229">Musk live beim AfD-Wahlkampfauftakt</a></li>
+	<li><a href="https://www.zdfheute.de/politik/ausland/usa-trump-sicherheitsstrategie-europa-100.html">ZDFheute: US-Sicherheitsstrategie unterstützt rechte Parteien in Europa (Dezember 2025)</a></li>
+</ul>
+
+<h4>Verfassungsschutz, Gericht, Verbotsdebatte</h4>
+<ul>
+	<li><a href="https://www.evangelisch.de/inhalte/253176/26-02-2026/verfassungsschutz-darf-afd-vorerst-nicht-als-rechtsextrem-einstufen">epd: Verwaltungsgericht Köln, Eilbeschluss vom 26.02.2026</a>; <a href="https://www.zdfheute.de/politik/deutschland/afd-verfassungsschutz-gericht-entscheidung-experte-100.html">ZDFheute: AfD bleibt Verdachtsfall</a></li>
+	<li><a href="https://www.abgeordnetenwatch.de/profile/ralf-stegner/fragen-antworten/was-ist-inzwischen-aus-dem-gruppenantrag-zur-verfassungsrechtlichen-ueberpruefung-der-afd-geworden">abgeordnetenwatch: Stand Gruppenantrag, GFF-Gutachten vom 25.06.2026</a></li>
+	<li><a href="https://correctiv.org/aktuelles/debatte-um-afd-verbot/2026/04/15/alle-wichtigen-dokumente-zum-moeglichen-afd-verbot/">Correctiv: Dokumente zum möglichen AfD-Verbot, Beschlüsse der Landtage</a></li>
+	<li><a href="https://www.lto.de/recht/hintergruende/h/debatte-afd-verbotsverfahren-bverfg-berliner-justizsenatorin-raet-davon-ab/print.html">LTO: Staatsrechtler zum Verbotsverfahren</a>; <a href="https://www.presseportal.de/st/Parteiverbot">Presseportal: Stimmen für und gegen ein Verbot</a></li>
+</ul>
+
+<h4>Landtagswahlen 2026</h4>
+<ul>
+	<li><a href="https://www.bpb.de/kurz-knapp/hintergrund-aktuell/581006/landtagswahl-in-sachsen-anhalt-2026-afd-staerkste-kraft/">bpb: Landtagswahl in Sachsen-Anhalt 2026</a></li>
+	<li><a href="https://www.volksstimme.de/deutschland-und-welt/deutschland/vier-stimmen-plus-afd-stellt-erstmals-landtagsprasidenten-4333677">dpa: AfD stellt erstmals einen Landtagspräsidenten (06.10.2026)</a></li>
+	<li><a href="https://t-online.de/nachrichten/deutschland/innenpolitik/id_101513152/ministerpraesident-sachsen-anhalt-siegmund-koennte-gegenkandidatin-bekommen.html">t-online: Ministerpräsidentenwahl in Magdeburg Mitte Dezember (04.11.2026)</a></li>
+	<li><a href="https://www.abgeordnetenwatch.de/mecklenburg-vorpommern/8">abgeordnetenwatch: Landtagswahl Mecklenburg-Vorpommern 2026</a>; <a href="https://www.infranken.de/deutschland/kurs-auf-rot-rot-gruen-in-mecklenburg-vorpommern-art-6402269,PRINT">dpa: Kurs auf Rot-Rot-Grün</a></li>
+	<li><a href="https://www.kas.de/ro/monitor-wahl-und-sozialforschung/detail/-/content/wahlanalyse-der-abgeordnetenhauswahl-in-berlin-am-20-september-2026">KAS: Wahlanalyse Berlin 2026 (AfD-Ergebnisse 2026 im Vergleich)</a></li>
+</ul>
+
+<h4>Weimarer Republik</h4>
+<ul>
+	<li><a href="https://www.dhm.de/lemo/biografie/alfred-hugenberg">LeMO: Alfred Hugenberg</a>; <a href="https://en.wikipedia.org/wiki/1929_German_Young_Plan_referendum">Wikipedia: Volksbegehren gegen den Young-Plan 1929</a></li>
+	<li><a href="https://www.fes.de/beitraege/thueringen-was-uns-hermann-brills-widerstand-gegen-die-nazis-lehrt">FES: Thüringen 1929/30, erste Regierungsbeteiligung der NSDAP</a>; <a href="https://www.blaetter.de/node/31929/download">Blätter: Generalprobe in Thüringen (11,3 %)</a></li>
+	<li><a href="https://www.beck-aktuell.de/daily/meldung/detail/gutachten-nsdap-vor-95-jahren-der-verpasste-nazi-stopp">beck-aktuell: Die preußische Denkschrift von 1930 (97 Seiten)</a></li>
+	<li><a href="https://en.wikipedia.org/wiki/1932_Prussian_state_election">Wikipedia: Preußische Landtagswahl 1932</a>; <a href="https://www.deutsche-biographie.de/122898397.html">Deutsche Biographie: Hanns Kerrl, Landtagspräsident ab 25.05.1932</a>; <a href="https://digital.blb-karlsruhe.de/download/pdf/5908492.pdf">Zeitungsbericht 27.05.1932: Enthaltung des Zentrums</a></li>
+	<li><a href="https://www.sachsen-anhalt.de/fileadmin/Bibliothek/STGS/Ausstellung_Bernburg_1933.pdf">Stiftung Gedenkstätten Sachsen-Anhalt: Anhalt 1932 (40,9 %, Freyberg)</a>; <a href="https://en.wikipedia.org/wiki/Alfred_Freyberg">Wikipedia: Alfred Freyberg</a></li>
+	<li><a href="https://www.degruyterbrill.com/document/doi/10.1515/9783110305852.134/pdf">De Gruyter: Wahl Görings mit den Stimmen der bürgerlichen Fraktionen</a></li>
+	<li><a href="https://www.dhm.de/lemo/biografie/wilhelm-groener">LeMO: Wilhelm Groener</a>; <a href="https://www.fes.de/archiv-der-sozialen-demokratie/artikelseite-adsd/preussenschlag">FES: Brünings Rücktritt am 30. Mai 1932</a></li>
+	<li><a href="https://germanhistorydocs.org/de/die-weimarer-republik-1918-1933/hitler-im-zeugenstand-vor-dem-reichsgericht-in-leipzig-25-september-1930">GHDI: Hitler vor dem Reichsgericht in Leipzig, 25.09.1930</a></li>
+	<li><a href="https://quoteinvestigator.com/2014/01/12/history-rhymes/">Quote Investigator: Herkunft des Reik-Zitats (1965)</a></li>
+	<li><a href="https://en.wikipedia.org/wiki/July_1932_German_federal_election">Wikipedia: Reichstagswahl Juli 1932 (Arbeitslosigkeit, Papen)</a></li>
+</ul>
+
+		</section>
+		<footer>
+			<dl>
+				<dt>Stand:</dt>
+				<dd>2026-11-05</dd>
+				<dt>Original (Idee, Umsetzung, Text):</dt>
+				<dd>
+					<a href="https://datajournal.org/schon-wieder/">„Schon wieder“</a> von
+					<a href="https://michael-kreil.de/">Michael Kreil</a>, datajournal.org,
+					<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+				</dd>
+				<dt>Diese Fassung:</dt>
+				<dd>
+					Bearbeitet und um die Entwicklungen bis November 2026 ergänzt. Die Abschnitte über die
+					Landtagswahlen 2026 und die Regierungskrise sind neu, der Ausblick ab Dezember 2026 wurde
+					neu geschrieben. Für die AfD ist alles ab „Machtübergabe“ ein fiktives Szenario. Lizenz:
+					CC BY 4.0. Code nach dem Original (MIT).
+				</dd>
+			</dl>
+		</footer>
+	</body>
+</html>
